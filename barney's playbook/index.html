@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barney's Playbook</title>
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #dfd3c3;
+            color: #3b2f2f;
+            text-align: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .book-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+
+        .book {
+            width: 400px;
+            height: 500px;
+            position: relative;
+            perspective: 2000px;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform-origin: 0 50%; /* Center vertical, left horizontal */
+            transition: transform 1s ease-in-out;
+            backface-visibility: hidden;
+        }
+
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .page .back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #e0c9a6;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+        }
+
+        .flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: gold;
+            border: none;
+            color: black;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Barney's Playbook</h1>
+    <div class="book-container">
+        <div class="book" id="book">
+            <div class="page" id="page0">
+                <img src="BP0.jpg" alt="Cover">
+                <div class="back"></div>
+            </div>
+            <div class="page" id="page1">
+                <img src="BP1.jpg" alt="Page 1">
+                <div class="back"></div>
+            </div>
+            <div class="page" id="page2">
+                <img src="BP2.jpg" alt="Page 2">
+                <div class="back"></div>
+            </div>
+            <div class="page" id="page3">
+                <img src="BP3.jpg" alt="Page 3">
+                <div class="back"></div>
+            </div>
+        </div>
+    </div>
+    <div class="button-container">
+        <button onclick="prevPage()">Prev</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        const pages = document.querySelectorAll('.page');
+        let currentPage = 0;
+
+        function updateBook() {
+            pages.forEach((page, index) => {
+                if (index < currentPage) {
+                    page.style.zIndex = pages.length - index;
+                    page.classList.add('flipped');
+                } else {
+                    page.style.zIndex = index;
+                    page.classList.remove('flipped');
+                }
+            });
+        }
+
+        function nextPage() {
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updateBook();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updateBook();
+            }
+        }
+
+        updateBook(); // Initialize
+    </script>
+</body>
+</html>
