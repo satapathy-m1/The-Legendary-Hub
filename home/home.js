@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("welcome-message").innerText = `Hey ${user.name}, ${user.favCharacter} welcomes you to MacLaren’s!`;
 });
 */
+
 document.addEventListener("DOMContentLoaded", function () {
     let userData = JSON.parse(localStorage.getItem("loggedInUser")) || {};
+    //userArray.push(userData);
     let welcomeMessage = document.getElementById("welcome-message");
     let characterQuote = document.getElementById("character-quote");
     let characterImage = document.getElementById("character-image");
@@ -93,10 +95,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const authLink = document.getElementById("auth-link");
 
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem("userLoggedIn");
 
-// Logout Function
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "authentication/login.html";
-}
+        if (isLoggedIn) {
+            authLink.textContent = "Logout";
+            authLink.href = "#";
+            authLink.addEventListener("click", logout);
+        } else {
+            
+            authLink.textContent = "Signup/Login";
+            authLink.href = "../authentication/login.html";
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("userLoggedIn");
+        alert("You have been logged out!");
+        
+        location.reload();
+    }
+
+    // Check if redirected from login page
+    if (localStorage.getItem("redirectedFromLogin")) {
+        localStorage.removeItem("redirectedFromLogin");
+        
+        location.reload();  // Force reload to update navbar
+    }
+
+    checkLoginStatus();
+});

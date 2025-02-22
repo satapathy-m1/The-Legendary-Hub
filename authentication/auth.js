@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Register Form Handling
     let registerForm = document.getElementById("register-form");
+    let userArray = [];
+    const users = JSON.parse(localStorage.getItem("loggedInUser"))
     if (registerForm) {
         registerForm.addEventListener("submit", function (event) {
             event.preventDefault(); 
@@ -11,7 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let favCharacter = document.getElementById("fav-character").value;
 
             let userData = { name, email, username, favCharacter };
-            localStorage.setItem("loggedInUser", JSON.stringify(userData));
+            users.push(userData);
+            localStorage.setItem("loggedInUser", JSON.stringify(users));
 
             alert("Registration successful! Redirecting...");
             window.location.href = "../home/index.html"; 
@@ -25,8 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
 
             let username = document.getElementById("username-login").value;
-            let storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
+            console.log(username);
+            let storedUser = users.find(username);
+            console.log(storedUser);
+            
+            
             if (storedUser && storedUser.username === username) {
                 alert("Login successful! Redirecting...");
                 window.location.href = "../home/index.html";
