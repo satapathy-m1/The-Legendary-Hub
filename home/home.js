@@ -94,9 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
         catchphraseCharacter.src = `assets/${selectedCatchphrase.character}`;
     });
 });
-
 document.addEventListener("DOMContentLoaded", function () {
     let authLink = document.getElementById("auth-link");
+    let darkModeToggle = document.getElementById("dark-mode-toggle");
     let user = JSON.parse(localStorage.getItem("loggedInUser"));
 
     function updateNavbar() {
@@ -114,5 +114,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    updateNavbar(); // Run the function on page load
+    updateNavbar(); // Run on page load
+
+    // 🌙 Dark Mode Logic
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        let isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+        darkModeToggle.textContent = isDarkMode ? "☀ Light Mode" : "🌙 Dark Mode";
+    }
+
+    // Check if Dark Mode was previously enabled
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        darkModeToggle.textContent = "☀ Light Mode";
+    }
+
+    darkModeToggle.addEventListener("click", toggleDarkMode);
 });
