@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Register Form Handling
     let registerForm = document.getElementById("register-form");
-    let userArray = [];
-    const users = JSON.parse(localStorage.getItem("loggedInUser"))
+
     if (registerForm) {
         registerForm.addEventListener("submit", function (event) {
             event.preventDefault(); 
@@ -12,12 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
             let username = document.getElementById("username").value;
             let favCharacter = document.getElementById("fav-character").value;
 
+            let users = JSON.parse(localStorage.getItem("users")) || []; // Get users array
+            let userExists = users.some(user => user.username === username);
+
+            if (userExists) {
+                alert("Username already taken. Choose a different one.");
+                return;
+            }
+
             let userData = { name, email, username, favCharacter };
             users.push(userData);
-            localStorage.setItem("loggedInUser", JSON.stringify(users));
+            localStorage.setItem("users", JSON.stringify(users)); // Store updated users
 
             alert("Registration successful! Redirecting...");
-            window.location.href = "../home/index.html"; 
+            window.location.href = "../authentication/login.html"; // Redirect to login page
         });
     }
 
@@ -28,12 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
 
             let username = document.getElementById("username-login").value;
-            console.log(username);
-            let storedUser = users.find(username);
-            console.log(storedUser);
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            let storedUser = users.find(user => user.username === username);
             
-            
-            if (storedUser && storedUser.username === username) {
+            if (storedUser) {
+                localStorage.setItem("loggedInUser", JSON.stringify(storedUser)); // Store logged-in user
                 alert("Login successful! Redirecting...");
                 window.location.href = "../home/index.html";
             } else {

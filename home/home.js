@@ -96,35 +96,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const authLink = document.getElementById("auth-link");
+    let authLink = document.getElementById("auth-link");
+    let user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    function checkLoginStatus() {
-        const isLoggedIn = localStorage.getItem("userLoggedIn");
-
-        if (isLoggedIn) {
+    function updateNavbar() {
+        if (user) {
             authLink.textContent = "Logout";
             authLink.href = "#";
-            authLink.addEventListener("click", logout);
+            authLink.addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                alert("You have been logged out!");
+                location.reload();
+            });
         } else {
-            
             authLink.textContent = "Signup/Login";
             authLink.href = "../authentication/login.html";
         }
     }
 
-    function logout() {
-        localStorage.removeItem("userLoggedIn");
-        alert("You have been logged out!");
-        
-        location.reload();
-    }
-
-    // Check if redirected from login page
-    if (localStorage.getItem("redirectedFromLogin")) {
-        localStorage.removeItem("redirectedFromLogin");
-        
-        location.reload();  // Force reload to update navbar
-    }
-
-    checkLoginStatus();
+    updateNavbar(); // Run the function on page load
 });
